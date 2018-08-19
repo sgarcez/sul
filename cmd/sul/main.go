@@ -86,14 +86,9 @@ func new() *cobra.Command {
 	return rootCmd
 }
 
-// Execute runs the command tree
-func Execute(c *cobra.Command) {
-	if err := c.Execute(); err != nil {
+func main() {
+	if err := new().Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-}
-
-func main() {
-	new().Execute()
 }
