@@ -1,7 +1,8 @@
 # Sul - Strava Uploader
 
 Simple Strava activity uploader inspired by [pi-python-garmin-strava](https://github.com/thegingerbloke/pi-python-garmin-strava).
-It creates Strava activities by uploading raw files from your device (only `.fit` supported currently).
+
+It creates Strava activities by uploading raw files from your device (only `.fit` files supported currently).
 
 ## Features
 
@@ -49,7 +50,8 @@ $ sul upload -t <token> -d /Volumes/GARMIN/ACTIVITY/
 
 ### systemd
 
-/etc/systemd/system/garmin-sul.service
+`/etc/systemd/system/garmin-sul.service`
+
 ```
 [Unit]
 Description=Garmin Sul trigger
@@ -63,7 +65,8 @@ ExecStart=/opt/sul/run-sul.sh
 WantedBy=media-usb0.mount
 ```
 
-/opt/sul/run-sul.sh
+`/opt/sul/run-sul.sh`
+
 ```
 #!/bin/bash
 
