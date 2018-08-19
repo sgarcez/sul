@@ -5,7 +5,7 @@ It creates Strava activities by uploading raw files from your device (only `.fit
 
 ## Features
 
-- Starts a local server to help the process of obtaining an access token with write permissions.
+- Starts a local server to guide the process of obtaining an access token with write permissions.
 - Uploads all files in a directory concurrently.
 
 ## Todo
