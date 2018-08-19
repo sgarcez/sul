@@ -47,4 +47,30 @@ $ sul upload -t <token> -d /Volumes/GARMIN/ACTIVITY/
 
 ## Automatic uploads on device mount
 
-Please see the documentation at [pi-python-garmin-strava](https://github.com/thegingerbloke/pi-python-garmin-strava)
+### systemd
+
+/etc/systemd/system/garmin-sul.service
+```
+[Unit]
+Description=Garmin Sul trigger
+Requires=media-usb0.mount
+After=media-media-usb0.mount
+
+[Service]
+ExecStart=/opt/sul/run-sul.sh
+
+[Install]
+WantedBy=media-usb0.mount
+```
+
+/opt/sul/run-sul.sh
+```
+#!/bin/bash
+
+/opt/sul/sul upload \
+    -t <token> \
+    -d /media/usb/GARMIN/ACTIVITY/ >> /opt/sul/log 2>&1
+```
+
+### udev
+  See the documentation at [pi-python-garmin-strava](https://github.com/thegingerbloke/pi-python-garmin-strava)
