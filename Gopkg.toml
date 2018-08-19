@@ -1,0 +1,11 @@
+[prune]
+  go-tests = true
+  unused-packages = true
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/strava/go.strava"
+
+[[constraint]]
+  name = "github.com/spf13/cobra"
+  version = "0.0.3"
