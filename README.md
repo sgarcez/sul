@@ -1,11 +1,11 @@
 # Sul - Strava Uploader
 
 Simple Strava activity uploader inspired by [pi-python-garmin-strava](https://github.com/thegingerbloke/pi-python-garmin-strava).
-It creates Strava activities by uploading raw files files from your device (only `fit` supported currently).
+It creates Strava activities by uploading raw files from your device (only `.fit` supported currently).
 
 ## Features
 
-- Starts a local server to help OAuth process to obtain an access token with write permissions.
+- Starts a local server to help the process of obtaining an access token with write permissions.
 - Uploads all files in a directory concurrently.
 
 ## Todo
@@ -17,7 +17,7 @@ It creates Strava activities by uploading raw files files from your device (only
 
 ### Manually
 
-Download your preferred flavor from the [releases page](https://github.com/sgarcez/sul/releases) and install manually.
+Download your preferred flavour from the [releases page](https://github.com/sgarcez/sul/releases) and install manually.
 
 ### Using go get
 
