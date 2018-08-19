@@ -1,7 +1,7 @@
-# Sul - Strava Activity Uploader
+# Sul - Strava Uploader
 
-Strava activity uploader inspired by [pi-python-garmin-strava](https://github.com/thegingerbloke/pi-python-garmin-strava).
-It creates Strava activities from raw files thus bypassing Garmin apps altogether.
+Simple Strava activity uploader inspired by [pi-python-garmin-strava](https://github.com/thegingerbloke/pi-python-garmin-strava).
+It creates Strava activities by uploading raw files files from your device (only `fit` supported currently).
 
 ## Features
 
@@ -27,7 +27,7 @@ $ go get -u github.com/sgarcez/sul/cmd/sul
 
 ## Usage
 
-### Obtaining an access token with write permissions
+### Setup: obtaining an access token with write permissions
 
 Once you create a Strava Application you can retrieve its id and secret here: [https://www.strava.com/settings/api](https://www.strava.com/settings/api)
 
@@ -37,7 +37,7 @@ $ sul auth -i <app-id> -s <app-secret>
 
 This will provide you with a URL to visit which will redirect you to a local server once the application has been authorised. The local server will capture and print out the new access token and exit the command.
 
-### Uploading activity files
+### Uploading files
 
 You can now use the token obtained in the previous step to upload activities to Strava, for example all files in a mounted Garmin device:
 
