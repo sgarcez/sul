@@ -59,8 +59,7 @@ func oAuthSuccess(auth *strava.AuthorizationResponse, w http.ResponseWriter, r *
 func oAuthFailure(err error, w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Authorization Failure:\n")
 	if err == strava.OAuthAuthorizationDeniedErr {
-		fmt.Fprint(w, "The user clicked the 'Do not Authorize' button on the previous page.\n")
-		fmt.Fprint(w, "This is the main error your application should handle.")
+		fmt.Fprint(w, "You clicked the 'Do not Authorize' button on the previous page.\n")
 	} else if err == strava.OAuthInvalidCredentialsErr {
 		fmt.Fprint(w, "You provided an incorrect client_id or client_secret.")
 	} else if err == strava.OAuthInvalidCodeErr {
