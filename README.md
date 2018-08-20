@@ -12,7 +12,9 @@ It creates Strava activities by uploading raw files from your device (only `.fit
 ## Todo
 
 - Add support for more file types(`TCX`, `GPX`, etc)
-- Add tombstones for processed files.
+- Add tombstones for processed files
+- Wrap errors properly in `pkg/uploader`
+- Ensure singleton server in `pkg/auth`
 
 ## Installation
 
