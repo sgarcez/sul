@@ -41,9 +41,5 @@ func (u *Uploader) Upload(fname string, f io.Reader) (*int64, error) {
 		return nil, err
 	}
 
-	// log.Printf(
-	// 	"%s - Activity created, you can view it at http://www.strava.com/activities/%d",
-	// 	fname, uploadSummary.ActivityId)
-
 	return &uploadSummary.ActivityId, nil
 }
