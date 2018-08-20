@@ -55,11 +55,17 @@ func new() *cobra.Command {
 						log.Print(err)
 						return
 					}
-					u.Upload(fname, f)
+					aid, err := u.Upload(fname, f)
+					if err != nil {
+						log.Print(err)
+						return
+					}
+					log.Printf(
+						"%s - Activity created, you can view it at http://www.strava.com/activities/%d",
+						fname, aid)
 				}(f.Name())
 			}
 			wg.Wait()
-			log.Print("Done")
 		},
 	}
 	uploadCmd.Flags().StringP("token", "t", "", "Access token")
@@ -73,7 +79,11 @@ func new() *cobra.Command {
 		Short: "Retrieves access token with write permissions via OAuth flow",
 		Run: func(cmd *cobra.Command, args []string) {
 			port := cmd.Flag("port").Value.String()
-			auth.Start(port)
+			err := auth.Start(port)
+			if err != nil {
+				log.Fatal(err)
+				os.Exit(1)
+			}
 		},
 	}
 	authCmd.Flags().IntVarP(&strava.ClientId, "id", "i", 0, "Strava Client ID")

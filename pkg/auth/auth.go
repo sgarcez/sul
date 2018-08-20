@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/strava/go.strava"
 )
@@ -13,7 +12,7 @@ import (
 var s *http.Server
 
 // Start runs an http server and captures an OAuth response
-func Start(port string) {
+func Start(port string) error {
 
 	// Application id and secret can be found at https://www.strava.com/settings/api
 	// define a strava.OAuthAuthenticator to hold state.
@@ -24,8 +23,7 @@ func Start(port string) {
 
 	path, err := authenticator.CallbackPath()
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return err
 	}
 
 	m := http.NewServeMux()
@@ -41,8 +39,9 @@ func Start(port string) {
 	fmt.Printf("-------------------------------\n")
 
 	if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		log.Fatal(err)
+		return err
 	}
+	return nil
 }
 
 func oAuthSuccess(auth *strava.AuthorizationResponse, w http.ResponseWriter, r *http.Request) {

@@ -22,7 +22,7 @@ func NewUploader(token string) *Uploader {
 }
 
 // Upload creates and Activity from a file
-func (u *Uploader) Upload(fname string, f io.Reader) *int64 {
+func (u *Uploader) Upload(fname string, f io.Reader) (*int64, error) {
 	ft := strava.FileDataTypes.FIT
 	resp, err := u.service.Create(ft, fname, f).Private().Do()
 	if err != nil {
@@ -31,19 +31,19 @@ func (u *Uploader) Upload(fname string, f io.Reader) *int64 {
 		} else {
 			log.Printf("%s - %s", fname, err)
 		}
-		return nil
+		return nil, err
 	}
 
 	uploadSummary, err := u.service.Get(resp.Id).Do()
 	if err != nil {
 		// TODO: parse error and sleep if activity isn't ready yet
 		log.Printf("%s - %s", fname, err)
-		return nil
+		return nil, err
 	}
 
-	log.Printf(
-		"%s - Activity created, you can view it at http://www.strava.com/activities/%d",
-		fname, uploadSummary.ActivityId)
+	// log.Printf(
+	// 	"%s - Activity created, you can view it at http://www.strava.com/activities/%d",
+	// 	fname, uploadSummary.ActivityId)
 
-	return &uploadSummary.ActivityId
+	return &uploadSummary.ActivityId, nil
 }
