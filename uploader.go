@@ -1,4 +1,4 @@
-package uploader
+package sul
 
 import (
 	"io"
@@ -21,7 +21,7 @@ func NewUploader(token string) *Uploader {
 	return &u
 }
 
-// Upload creates and Activity from a file
+// Upload creates a Strava Activity from a file
 func (u *Uploader) Upload(fname string, f io.Reader) (*int64, error) {
 	ft := strava.FileDataTypes.FIT
 	resp, err := u.service.Create(ft, fname, f).Private().Do()

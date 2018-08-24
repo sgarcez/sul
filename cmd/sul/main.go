@@ -1,15 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"path"
 	"sync"
 
-	"github.com/sgarcez/sul/pkg/auth"
-	"github.com/sgarcez/sul/pkg/uploader"
+	"github.com/sgarcez/sul"
 	"github.com/spf13/cobra"
 	strava "github.com/strava/go.strava"
 )
@@ -36,7 +37,7 @@ func new() *cobra.Command {
 		Short: "Uploads activity files from directory",
 		Run: func(cmd *cobra.Command, args []string) {
 			accessToken := cmd.Flag("token").Value.String()
-			u := uploader.NewUploader(accessToken)
+			u := sul.NewUploader(accessToken)
 
 			inputDir := cmd.Flag("dir").Value.String()
 			files, err := ioutil.ReadDir(inputDir)
@@ -79,10 +80,32 @@ func new() *cobra.Command {
 		Short: "Retrieves access token with write permissions via OAuth flow",
 		Run: func(cmd *cobra.Command, args []string) {
 			port := cmd.Flag("port").Value.String()
-			err := auth.Start(port)
+
+			m := http.NewServeMux()
+			s := &http.Server{Addr: fmt.Sprintf(":%s", port), Handler: m}
+			authURL, callbackPath, callbackHandler, err := sul.Handler(port)
 			if err != nil {
 				log.Fatal(err)
-				os.Exit(1)
+			}
+			handleAndKill := func(in http.HandlerFunc) http.HandlerFunc {
+				return func(w http.ResponseWriter, r *http.Request) {
+					in(w, r)
+					fmt.Fprintf(w, "\nYou can close this window")
+					go func() {
+						if err := s.Shutdown(context.Background()); err != nil {
+							log.Fatal(err)
+						}
+					}()
+				}
+			}
+			m.HandleFunc(callbackPath, handleAndKill(callbackHandler))
+
+			fmt.Printf("-------------------------------\n")
+			fmt.Printf("Open this URL to authorise your application:\n\n%s\n", authURL)
+			fmt.Printf("-------------------------------\n")
+
+			if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+				log.Fatal(err)
 			}
 		},
 	}
