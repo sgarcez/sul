@@ -18,13 +18,19 @@ It creates Strava activities by uploading raw files from your device (only `.fit
 
 ## Installation
 
-### Manually
+### Binaries
 
 Download your preferred flavour from the [releases page](https://github.com/sgarcez/sul/releases) and install manually.
 
+For example, for raspberry pi (find the correct [ARM architecture version](https://en.wikipedia.org/wiki/Raspberry_Pi#Specifications)):
+
+```shell
+$ curl -L https://github.com/sgarcez/sul/releases/download/v0.0.2/sul_0.0.2_Linux_armv7.tar.gz | tar xz
+```
+
 ### Using go get
 
-```
+```shell
 $ go get -u github.com/sgarcez/sul/cmd/sul
 ```
 
@@ -78,4 +84,5 @@ WantedBy=media-usb0.mount
 ```
 
 ### udev
-  See the documentation at [pi-python-garmin-strava](https://github.com/thegingerbloke/pi-python-garmin-strava)
+
+See the documentation at [pi-python-garmin-strava](https://github.com/thegingerbloke/pi-python-garmin-strava)
