@@ -27,7 +27,7 @@ func new() *cobra.Command {
 		Use:   "version",
 		Short: "Print the version number of Sul",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("Sul - Strava Uploader v0.0.1")
+			fmt.Println("Sul - Strava Uploader v0.0.2")
 		},
 	}
 	rootCmd.AddCommand(versionCmd)
