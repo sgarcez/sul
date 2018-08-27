@@ -31,7 +31,7 @@ $ curl -L https://github.com/sgarcez/sul/releases/download/v0.0.2/sul_0.0.2_Linu
 ### Using go get
 
 ```shell
-$ go get -u github.com/sgarcez/sul/cmd/sul
+$ go get -u github.com/sgarcez/sul
 ```
 
 ## Usage

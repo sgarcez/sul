@@ -1,4 +1,4 @@
-package sul
+package main
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	"github.com/strava/go.strava"
 )
 
-// Handler provides an auth url and HandlerFunc to handle its redirect
-func Handler(port string) (string, string, http.HandlerFunc, error) {
+// AuthHandler provides an auth url and HandlerFunc to handle its redirect
+func AuthHandler(port string) (string, string, http.HandlerFunc, error) {
 
 	// Application id and secret can be found at https://www.strava.com/settings/api
 	// define a strava.OAuthAuthenticator to hold state.
