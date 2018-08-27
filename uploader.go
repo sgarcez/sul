@@ -1,4 +1,4 @@
-package sul
+package main
 
 import (
 	"io"

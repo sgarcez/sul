@@ -10,7 +10,6 @@ import (
 	"path"
 	"sync"
 
-	"github.com/sgarcez/sul"
 	"github.com/spf13/cobra"
 	strava "github.com/strava/go.strava"
 )
@@ -37,7 +36,7 @@ func new() *cobra.Command {
 		Short: "Uploads activity files from directory",
 		Run: func(cmd *cobra.Command, args []string) {
 			accessToken := cmd.Flag("token").Value.String()
-			u := sul.NewUploader(accessToken)
+			u := NewUploader(accessToken)
 
 			inputDir := cmd.Flag("dir").Value.String()
 			files, err := ioutil.ReadDir(inputDir)
@@ -83,7 +82,7 @@ func new() *cobra.Command {
 
 			m := http.NewServeMux()
 			s := &http.Server{Addr: fmt.Sprintf(":%s", port), Handler: m}
-			authURL, callbackPath, callbackHandler, err := sul.Handler(port)
+			authURL, callbackPath, callbackHandler, err := AuthHandler(port)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -101,7 +100,7 @@ func new() *cobra.Command {
 			m.HandleFunc(callbackPath, handleAndKill(callbackHandler))
 
 			fmt.Printf("-------------------------------\n")
-			fmt.Printf("Open this URL to authorise your application:\n\n%s\n", authURL)
+			fmt.Printf("Use this URL to authorise your application:\n\n%s\n", authURL)
 			fmt.Printf("-------------------------------\n")
 
 			if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {

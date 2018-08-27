@@ -1,7 +1,7 @@
 builds:
   - env:
       - CGO_ENABLED=0
-    main: ./cmd/sul/main.go
+    main: ./main.go
     binary: sul
     goos:
       - linux
