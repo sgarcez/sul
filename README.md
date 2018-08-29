@@ -73,6 +73,12 @@ ExecStart=/opt/sul/run-sul.sh
 WantedBy=media-usb0.mount
 ```
 
+You can find the device unit with:
+
+```
+$ sudo systemctl list-units -t mount
+```
+
 `/opt/sul/run-sul.sh`
 
 ```
@@ -81,6 +87,13 @@ WantedBy=media-usb0.mount
 /opt/sul/sul upload \
     -t <token> \
     -d /media/usb/GARMIN/ACTIVITY/ >> /opt/sul/log 2>&1
+```
+
+Enable the Service:
+
+```
+$ sudo systemctl start garmin-sul.service
+$ sudo systemctl enable garmin-sul.service
 ```
 
 ### udev
