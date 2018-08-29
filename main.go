@@ -36,7 +36,7 @@ func new() *cobra.Command {
 		Short: "Uploads activity files from directory",
 		Run: func(cmd *cobra.Command, args []string) {
 			accessToken := cmd.Flag("token").Value.String()
-			u := NewUploader(accessToken)
+			u := newUploader(accessToken)
 
 			inputDir := cmd.Flag("dir").Value.String()
 			files, err := ioutil.ReadDir(inputDir)
@@ -82,7 +82,7 @@ func new() *cobra.Command {
 
 			m := http.NewServeMux()
 			s := &http.Server{Addr: fmt.Sprintf(":%s", port), Handler: m}
-			authURL, callbackPath, callbackHandler, err := AuthHandler(port)
+			authURL, callbackPath, callbackHandler, err := authHandler(port)
 			if err != nil {
 				log.Fatal(err)
 			}
