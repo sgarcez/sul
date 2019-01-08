@@ -1,4 +1,4 @@
-# Sul - Strava Uploader
+# Sul - Strava Uploader [![Go Report Card](https://goreportcard.com/badge/github.com/sgarcez/sul)](https://goreportcard.com/report/github.com/sgarcez/sul)
 
 Simple Strava activity uploader inspired by [pi-python-garmin-strava](https://github.com/thegingerbloke/pi-python-garmin-strava).
 
