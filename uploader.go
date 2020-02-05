@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"time"
 	"io"
 	"log"
 
@@ -34,12 +36,24 @@ func (u *uploader) Upload(fname string, f io.Reader) (*int64, error) {
 		return nil, err
 	}
 
-	uploadSummary, err := u.service.Get(resp.Id).Do()
-	if err != nil {
-		// TODO: parse error and sleep if activity isn't ready yet
-		log.Printf("%s - %s", fname, err)
-		return nil, err
-	}
+	tries := 0
+	for {
 
-	return &uploadSummary.ActivityId, nil
+		sum, err := u.service.Get(resp.Id).Do()
+		if err != nil {
+			return nil, fmt.Errorf("get uploaded activity summary: %w", err)
+		}
+
+		if sum.Error != "" {
+			return nil, fmt.Errorf("%s", sum.Error)
+		}
+
+		if sum.Status == "Your activity is still being processed." && tries < 10 {
+			log.Printf("%s - waiting for activity to be processed", fname)
+			tries++
+			time.Sleep(5* time.Second)
+		} else {	
+			return &sum.ActivityId, nil
+		}
+	}
 }

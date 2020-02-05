@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"strings"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -45,19 +46,25 @@ func new() *cobra.Command {
 			}
 
 			var wg sync.WaitGroup
-			wg.Add(len(files))
 			log.Printf("Processing %d files\n", len(files))
+
 			for _, f := range files {
+				if f.IsDir() || strings.HasPrefix(f.Name(), ".") || !strings.HasSuffix(f.Name(), ".fit") {
+					log.Printf("Ignoring %s\n", f.Name())
+					continue
+				}
+
+				wg.Add(1)
 				go func(fname string) {
 					defer wg.Done()
 					f, err := os.Open(path.Join(inputDir, fname))
 					if err != nil {
-						log.Print(err)
+						log.Printf("%s - open: %s", fname, err)
 						return
 					}
 					aid, err := u.Upload(fname, f)
 					if err != nil {
-						log.Print(err)
+						log.Printf("%s - upload: %s", fname, err)
 						return
 					}
 					log.Printf(
@@ -82,22 +89,10 @@ func new() *cobra.Command {
 
 			m := http.NewServeMux()
 			s := &http.Server{Addr: fmt.Sprintf(":%s", port), Handler: m}
-			authURL, callbackPath, callbackHandler, err := authHandler(port)
-			if err != nil {
-				log.Fatal(err)
-			}
-			handleAndKill := func(in http.HandlerFunc) http.HandlerFunc {
-				return func(w http.ResponseWriter, r *http.Request) {
-					in(w, r)
-					fmt.Fprintf(w, "\nYou can close this window")
-					go func() {
-						if err := s.Shutdown(context.Background()); err != nil {
-							log.Fatal(err)
-						}
-					}()
-				}
-			}
-			m.HandleFunc(callbackPath, handleAndKill(callbackHandler))
+
+			authURL, path, handler := AuthHandler(port)
+
+			m.HandleFunc(path, handleAndKill(s, handler))
 
 			fmt.Printf("-------------------------------\n")
 			fmt.Printf("Use this URL to authorise your application:\n\n%s\n", authURL)
@@ -122,5 +117,17 @@ func main() {
 	if err := new().Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
+	}
+}
+
+func handleAndKill(s *http.Server, in http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		in(w, r)
+		fmt.Fprintf(w, "\nYou can close this window")
+		go func() {
+			if err := s.Shutdown(context.Background()); err != nil {
+				log.Fatal(err)
+			}
+		}()
 	}
 }

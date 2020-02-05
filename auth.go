@@ -4,30 +4,24 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/strava/go.strava"
+	strava "github.com/strava/go.strava"
 )
 
-// authHandler provides an auth url and HandlerFunc to handle its redirect
-func authHandler(port string) (string, string, http.HandlerFunc, error) {
-
-	// Application id and secret can be found at https://www.strava.com/settings/api
-	// define a strava.OAuthAuthenticator to hold state.
-	// The callback url is used to generate an AuthorizationURL.
+// AuthHandler provides an url to direct the user to as well as
+// an http.HandlerFunc to handle the redirect from the remote host.
+func AuthHandler(port string) (authURL string, localPath string, handler http.HandlerFunc) {
 	authenticator := &strava.OAuthAuthenticator{
 		CallbackURL: fmt.Sprintf("http://localhost:%s/exchange_token", port),
 	}
 
-	callbackPath, err := authenticator.CallbackPath()
-	if err != nil {
-		return "", callbackPath, nil, err
-	}
+	// the path that our server should listen on
+	localPath = "/exchange_token"
 
-	authURL := authenticator.AuthorizationURL(
-		"state1", strava.Permissions.WriteViewPrivate, true)
+	authURL = authenticator.AuthorizationURL("state1", "activity:write", true)
 
-	handler := authenticator.HandlerFunc(success, failure)
+	handler = authenticator.HandlerFunc(success, failure)
 
-	return authURL, callbackPath, handler, nil
+	return
 }
 
 func success(auth *strava.AuthorizationResponse, w http.ResponseWriter, r *http.Request) {
