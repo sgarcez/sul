@@ -49,7 +49,7 @@ func new() *cobra.Command {
 			log.Printf("Processing %d files\n", len(files))
 
 			for _, f := range files {
-				if f.IsDir() || strings.HasPrefix(f.Name(), ".") || !strings.HasSuffix(f.Name(), ".fit") {
+				if f.IsDir() || strings.HasPrefix(f.Name(), ".") || !strings.HasSuffix(strings.ToLower(f.Name()), ".fit") {
 					log.Printf("Ignoring %s\n", f.Name())
 					continue
 				}
